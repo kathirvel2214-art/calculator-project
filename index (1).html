@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Calculator</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <div class="calc-wrapper">
+    <div class="calculator">
+
+      <div class="display">
+        <div class="expression" id="expression"></div>
+        <div class="result" id="result">0</div>
+      </div>
+
+      <div class="buttons">
+
+      
+        <button class="btn btn-util" onclick="clearAll()">CLR</button>
+        <button class="btn btn-util" onclick="deleteLast()">DEL</button>
+        <button class="btn btn-operator" onclick="appendToExpr('%')">%</button>
+        <button class="btn btn-operator" onclick="appendToExpr('/')">÷</button>
+
+        
+        <button class="btn btn-number" onclick="appendToExpr('7')">7</button>
+        <button class="btn btn-number" onclick="appendToExpr('8')">8</button>
+        <button class="btn btn-number" onclick="appendToExpr('9')">9</button>
+        <button class="btn btn-operator" onclick="appendToExpr('*')">×</button>
+
+        
+        <button class="btn btn-number" onclick="appendToExpr('4')">4</button>
+        <button class="btn btn-number" onclick="appendToExpr('5')">5</button>
+        <button class="btn btn-number" onclick="appendToExpr('6')">6</button>
+        <button class="btn btn-operator" onclick="appendToExpr('-')">−</button>
+
+        
+        <button class="btn btn-number" onclick="appendToExpr('1')">1</button>
+        <button class="btn btn-number" onclick="appendToExpr('2')">2</button>
+        <button class="btn btn-number" onclick="appendToExpr('3')">3</button>
+        <button class="btn btn-operator" onclick="appendToExpr('+')">+</button>
+
+        
+        <button class="btn btn-number" onclick="appendToExpr('00')">00</button>
+        <button class="btn btn-number" onclick="appendToExpr('0')">0</button>
+        <button class="btn btn-number" onclick="appendToExpr('.')">.</button>
+        <button class="btn btn-equals" onclick="calculate()">=</button>
+
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let expression = '';
+    let justCalculated = false;
+
+    const exprEl  = document.getElementById('expression');
+    const resultEl = document.getElementById('result');
+
+    function appendToExpr(value) {
+
+      if (justCalculated) {
+        if (['+', '-', '*', '/', '%'].includes(value)) {
+          expression = resultEl.textContent;
+        } else {
+          expression = '';
+          resultEl.textContent = '0';
+        }
+        justCalculated = false;
+      }
+
+      if (value === '.') {
+        const parts = expression.split(/[\+\-\*\/\%]/);
+        const lastPart = parts[parts.length - 1];
+        if (lastPart.includes('.')) return;
+      }
+
+      expression += value;
+      updateDisplay();
+    }
+
+    function deleteLast() {
+      justCalculated = false;
+      expression = expression.slice(0, -1);
+      updateDisplay();
+      if (!expression) resultEl.textContent = '0';
+    }
+
+    function clearAll() {
+      expression = '';
+      justCalculated = false;
+      exprEl.textContent  = '';
+      resultEl.textContent = '0';
+    }
+
+    function calculate() {
+      if (!expression) return;
+      try {
+
+        const sanitized = expression
+          .replace(/[^0-9+\-*/.%()]/g, '');
+        const res = Function('"use strict"; return (' + sanitized + ')')();
+        exprEl.textContent  = formatExpr(expression) + ' =';
+        resultEl.textContent = parseFloat(res.toFixed(10)).toString();
+        expression = res.toString();
+        justCalculated = true;
+      } catch {
+        resultEl.textContent = 'Error';
+        expression = '';
+        justCalculated = false;
+      }
+    }
+
+    function updateDisplay() {
+      exprEl.textContent = formatExpr(expression);
+    }
+
+    // Swap raw operators with readable symbols for display only
+    function formatExpr(expr) {
+      return expr
+        .replace(/\*/g, '×')
+        .replace(/\//g, '÷')
+        .replace(/-/g, '−');
+    }
+
+    // Keyboard support
+    document.addEventListener('keydown', (e) => {
+      const key = e.key;
+      if ('0123456789.'.includes(key)) appendToExpr(key);
+      else if (key === '+') appendToExpr('+');
+      else if (key === '-') appendToExpr('-');
+      else if (key === '*') appendToExpr('*');
+      else if (key === '/') { e.preventDefault(); appendToExpr('/'); }
+      else if (key === '%') appendToExpr('%');
+      else if (key === 'Enter' || key === '=') calculate();
+      else if (key === 'Backspace') deleteLast();
+      else if (key === 'Escape') clearAll();
+    });
+  </script>
+
+</body>
+</html>

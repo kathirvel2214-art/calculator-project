@@ -1,0 +1,139 @@
+
+/* ── Reset & Base ─────────────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* ── Page Background ──────────────────────────────────────── */
+body {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  background-color: #9bc5e7; /* sky blue page bg */
+}
+
+/* ── Wrapper ──────────────────────────────────────────────── */
+.calc-wrapper {
+  position: relative;
+}
+
+/* ── Neumorphic Card ──────────────────────────────────────── */
+.calculator {
+  width: 320px;
+  border-radius: 32px;
+  padding: 28px 22px 22px;
+  background-color: #c2daf0;
+  box-shadow:
+    10px 10px 24px #8aaec8,
+    -10px -10px 24px #daf0ff;
+}
+
+/* ── Display ──────────────────────────────────────────────── */
+.display {
+  background-color: #c2daf0;
+  border-radius: 18px;
+  padding: 16px 18px 12px;
+  margin-bottom: 22px;
+  min-height: 80px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: flex-end;
+  box-shadow:
+    inset 6px 6px 14px #8aaec8,
+    inset -6px -6px 14px #daf0ff;
+  overflow: hidden;
+}
+
+.expression {
+  font-size: 13px;
+  color: #7a9ab5;
+  letter-spacing: 0.4px;
+  min-height: 18px;
+  word-break: break-all;
+  text-align: right;
+}
+
+.result {
+  font-size: 40px;
+  font-weight: 600;
+  color: #1e3a52;
+  letter-spacing: -1px;
+  word-break: break-all;
+  text-align: right;
+  line-height: 1.1;
+  margin-top: 2px;
+}
+
+/* ── Button Grid ──────────────────────────────────────────── */
+.buttons {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 13px;
+}
+
+/* ── Base Button ──────────────────────────────────────────── */
+.btn {
+  height: 60px;
+  border: none;
+  border-radius: 14px;
+  font-size: 17px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: box-shadow 0.12s ease, transform 0.1s ease;
+  outline: none;
+  background-color: #c2daf0;
+  /* Neumorphic raised look */
+  box-shadow:
+    5px 5px 12px #8aaec8,
+    -5px -5px 12px #daf0ff;
+}
+
+.btn:hover {
+  box-shadow:
+    6px 6px 14px #7da3be,
+    -6px -6px 14px #e0f4ff;
+}
+
+.btn:active {
+  transform: scale(0.96);
+  box-shadow:
+    inset 4px 4px 10px #8aaec8,
+    inset -4px -4px 10px #daf0ff;
+}
+
+/* ── Number Buttons ───────────────────────────────────────── */
+.btn-number {
+  color: #1e3a52;
+}
+
+/* ── Operator Buttons ─────────────────────────────────────── */
+.btn-operator {
+  color: #f5a623; /* orange like the image */
+  font-size: 20px;
+}
+
+/* ── Utility Buttons (CLR, DEL) ───────────────────────────── */
+.btn-util {
+  color: #268ac9;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+/* ── Equals Button ────────────────────────────────────────── */
+.btn-equals {
+  color: #f5a623;
+  font-size: 24px;
+  font-weight: 700;
+}
+
+/* ── Focus Ring (accessibility) ───────────────────────────── */
+.btn:focus-visible {
+  outline: 2px solid #5aa8d8;
+  outline-offset: 2px;
+}
